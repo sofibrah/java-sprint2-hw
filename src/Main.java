@@ -1,9 +1,17 @@
 public class Main {
-
-    public static FileReader fileReader = new FileReader();
-    public static Interface anInterface = new Interface ();
-    public static MonthlyReport monthlyReport = new MonthlyReport();
-    public static YearlyReport yearlyReport = new YearlyReport();
-    public static Checker checker = new Checker();
-
+ public static void main(String[] args) {
+  new Interface();
+ }
+ public static FileReader fileReader = new FileReader();
+ //public static ReportsDemo ReportsDemo;
+ public static Debugger debugger = new Debugger();
+ public static String wrongCommand = "Ошибка ввода. Неверная команда!";
+ public static String wrongReport = "Ошибка ввода. Неполные данные по отчетам!";
 }
+
+
+// public static MonthlyReport monthlyReport ;
+// public static YearlyReport yearlyReport;
+// public static Checker checker;
+
+
