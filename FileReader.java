@@ -1,22 +1,19 @@
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.io.IOException;
 
-import static java.lang.Integer.parseInt;
+
 
 
 public class FileReader {
-
-    private final String currentYear;
+    public String currentYear;
     public HashMap<String, String> monthsList = new HashMap<>();
+    public MonthlyReport[] monthlyReports;
+    boolean MRis = false;
 
-     public MonthlyReport[] monthlyReports;
-     public YearlyReport yearlyReport;
-
-     boolean MRis = false;
-     boolean YRis = false;
+    public YearlyReport yearlyReport;
+    boolean YRis = false;
 
     FileReader() {
         currentYear = "2021";
@@ -34,79 +31,75 @@ public class FileReader {
         monthsList.put("12", "Декабрь");
         monthlyReports = new MonthlyReport[monthsList.size()];
     }
-     public void  MonthReading() {
-         int processedReports = 0;
 
-         for (String monthNumber : monthsList.keySet()) {
-             Path filePath = Path.of("./resources/" + "m." + currentYear + monthNumber + ".csv");
+    public void MonthReading() {
+        int processedReports = 0;
+        for (String monthNumber : monthsList.keySet()) {
+            Path filePath = Path.of("./resources/" + "m." + currentYear + monthNumber + ".csv");
+            if (Files.exists(filePath)) {
+                try {
+                    String csvData = Files.readString(filePath);
+                    String[] lines = csvData.split("\\n");
+                    HashMap<String, Integer> incomeList = new HashMap<>();
+                    HashMap<String, Integer> expensesList = new HashMap<>();
 
-             if (Files.exists(filePath)) {
+                    for (int i = 0; i < lines.length; i++) {
+                        String[] linesContent = lines[i].split(",");
+                        String itemName = linesContent[0];
+                        int itemSum = Integer.parseInt(linesContent[2]) * Integer.parseInt(linesContent[3]);
 
-                 try {
-                     String csvData = Files.readString(filePath);
-                     String[] lines = csvData.split("\n");
-                     HashMap<String, Integer> incomeList = new HashMap<>();
-                     HashMap<String, Integer> expensesList = new HashMap<>();
-
-                     for (String word : Arrays.copyOfRange(lines,1,lines.length)) {
-
-                         String[] linesContent = word.split(",");
-
-                         String itemName = linesContent[0];
-                         Integer quantity = Integer.valueOf(linesContent[2]);
-                         Integer unit_price = Integer.valueOf(linesContent[3]);
-                         int itemSum = quantity * unit_price;
-
-                         if (linesContent[1].equalsIgnoreCase("false")) {
-                             incomeList.put(itemName, itemSum);
-                         } else {
-                             expensesList.put(itemName, itemSum);
-                         }
-
-                         monthlyReports[parseInt(monthNumber) - 1] = new MonthlyReport(monthsList.get(monthNumber), incomeList, expensesList);
-                         processedReports++;
-                     }
-                 } catch (IOException e) {
-                     System.out.println("Не найден файл отчета " + "m." + yearlyReport.currentYear + MonthlyReport.monthNumber + ".csv !");
-                 }
-                 if (processedReports > 0) {
-                     MRis = true;
-                     System.out.println("Обработано месячных отчетов: " + processedReports);
-                 } else
-                     System.out.println(Main.wrongReport);
-             }
-         }
-     }
-       public void YearReading() {
-            HashMap<String, Integer> incomeList = new HashMap<>();
-            HashMap<String, Integer> expensesList = new HashMap<>();
-            Path filePath = Path.of("./resources/" + "y." + currentYear + ".csv");
-
-            String csvData;
-            try {
-                csvData = Files.readString(filePath);
-                String[] lines = csvData.split("\n");
-
-                for (int i = 1; i < lines.length; i++) {
-                    String[] linesContent = lines[i].split(",");
-                    String monthNumber = linesContent[0];
-                    int monthsSum = parseInt(linesContent[1]);
-
-                    if (linesContent[2].equalsIgnoreCase("false")) {
-                        incomeList.put(monthsList.get(monthNumber),  monthsSum);
-                    } else {
-                        expensesList.put(monthsList.get(monthNumber), monthsSum);
+                        if (linesContent[1].equalsIgnoreCase("false")) {
+                            incomeList.put(itemName, itemSum);
+                        } else {
+                            expensesList.put(itemName, itemSum);
+                        }
                     }
+                    monthlyReports[Integer.parseInt(monthNumber) - 1] = new MonthlyReport(monthsList.get(monthNumber), incomeList, expensesList);
+                    processedReports++;
+
+                } catch (IOException e) {
+                    System.out.println("Не найден файл отчета " + "m." + currentYear + monthNumber + ".csv !");
                 }
-                yearlyReport = new YearlyReport(currentYear, incomeList, expensesList);
-                YRis = true;
-                System.out.println("Годовой отчет успешно считан!");
-            } catch (IOException e) {
-                System.out.println("Что-то пошло не так...");
             }
+        }
+        if (processedReports == 0) {
+            System.out.println(Main.wrongReport);
+        } else {
+            MRis = true;
+            System.out.println("Обработано " + processedReports + " месячных отчетов");
         }
     }
 
+    public void YearReading() {
+        HashMap<String, Integer> incomeList = new HashMap<>();
+        HashMap<String, Integer> expensesList = new HashMap<>();
+        Path filePath = Path.of("./resources/" + "y." + currentYear + ".csv");
+
+
+        String csvData = null;
+        try {
+            csvData = Files.readString(filePath);
+            String[] lines = csvData.split("\\n");
+
+            for (int i = 1; i < lines.length; i++) {
+                String[] linesContent = lines[i].split(",");
+                String monthNumber = linesContent[0];
+                int monthsSum = Integer.parseInt(linesContent[1]);
+
+                if (linesContent[2].equalsIgnoreCase("false")) {
+                    incomeList.put(monthsList.get(monthNumber), monthsSum);
+                } else {
+                    expensesList.put(monthsList.get(monthNumber), monthsSum);
+                }
+            }
+            yearlyReport = new YearlyReport(currentYear, incomeList, expensesList);
+            YRis = true;
+            System.out.println("Годовой отчет успешно считан!");
+        } catch (IOException e) {
+            System.out.println("Что-то пошло не так...");
+        }
+    }
+}
 
 
 
@@ -115,3 +108,13 @@ public class FileReader {
 
 
 
+
+//в этом классе происходит привязка программы к отчетам их обработка
+// с помощью IOException и блока try catch предотвращаем возможную ошибку
+//   ArrayList<String> readFileContents(String fileName) {
+//     String path = "./resources/" + fileName;
+//    try {
+//      return new ArrayList<>(Files.readAllLines(Path.of(path)));
+//  } catch (IOException e) {
+//    System.out.println("Невозможно прочитать файл с отчётом. Возможно, файл отсутствует в нужной директории.");
+//   return new ArrayList<>();
