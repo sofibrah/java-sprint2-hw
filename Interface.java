@@ -2,18 +2,13 @@ import java.util.Scanner;
 
 
 public class Interface {
-    //обработка главного меню
 
-    // ReportsDemo reportsDemo;
-    Interface() {
+    Interface()  {
         Scanner scanner = new Scanner(System.in);
         String command;
         do {
             printMenu();
             command = scanner.nextLine();
-
-
-         //   String command = scanner.nextLine();
 
             switch (command) {
                 case "1":
@@ -23,9 +18,7 @@ public class Interface {
                     Main.fileReader.YearReading();
                     break;
                 case "3":
-                    if (Main.debugger.DataChecking()) {
-                        Main.debugger.CheckList();
-                    }
+                    Main.debugger.CheckList();
                     break;
                 case "4":
                     if (Main.fileReader.MRis) {
@@ -44,13 +37,13 @@ public class Interface {
                 case "0":
                     break;
                 default:
-                    System.out.println(Main.wrongComand);
+                    System.out.println(Main.wrongCommand);
             }
-        }while (!command.isEmpty());
+        } while (!command.isEmpty());
     }
 
     private static void printMenu() {
-        //прописываю меню, которое выведется на экран пользователя
+
         System.out.println("Здравствуйте!");
         System.out.println();
         System.out.println("Выберите команду:");
