@@ -3,9 +3,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Checker {
-    // проверка на разногласия в отчетах
 
-        public static List<String> coincidenceSerch(HashMap<String, String> monthsList, MonthlyReport[] monthlyReport, YearlyReport yearlyReport) {
+        public static List<String> coincidenceSearch(HashMap<String, String> monthsList, MonthlyReport[] monthlyReport, YearlyReport yearlyReport) {
             List<String> concurrence = new ArrayList<>();
 
             for (String monthNumber : monthsList.keySet()) {
@@ -14,7 +13,7 @@ public class Checker {
 
                 if ((monthlyReport[monthIndex] != null) && (yearlyReport.incomeList.get(monthName) != null)
                         && (yearlyReport.expensesList.get(monthName) != null)) {
-                    if (checkIfMonthsMismatch(monthIndex, monthName, monthlyReport, yearlyReport)) {
+                    if (!checkIfMonthsMismatch(monthIndex, monthName, monthlyReport, yearlyReport)) {
                         concurrence.add(monthName);
                     }
 
@@ -35,10 +34,10 @@ public class Checker {
             boolean isIncomeMatching = true;
             boolean isExpensesMatching = true;
 
-            for (int income : reviewedMonthIncome.values()) {
+            for (double income : reviewedMonthIncome.values()) {
                 monthTotalIncome += income;
             }
-            for (int expenses : reviewedMonthExpenses.values()) {
+            for (double expenses : reviewedMonthExpenses.values()) {
                 monthTotalExpenses += expenses;
             }
 
@@ -49,6 +48,6 @@ public class Checker {
                 isExpensesMatching = false;
             }
 
-            return !isIncomeMatching || !isExpensesMatching;
+            return isIncomeMatching & isExpensesMatching;
         }
     }
