@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Checker {
-    // проверка на разногласия в отчетах (3 пункт меню)
 
         public static List<String> coincidenceSearch(HashMap<String, String> monthsList, MonthlyReport[] monthlyReport, YearlyReport yearlyReport) {
             List<String> concurrence = new ArrayList<>();
