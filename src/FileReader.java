@@ -41,7 +41,7 @@ public class FileReader {
              Path filePath = Path.of("./resources/" + "m." + currentYear + monthNumber + ".csv");
 
              if (Files.exists(filePath)) {
-                 // проверяю есть ли файл по этому адресу если да, то распрелеяю инфу по ячейкам
+
                  try {
                      String csvData = Files.readString(filePath);
                      String[] lines = csvData.split("\n");
@@ -49,15 +49,15 @@ public class FileReader {
                      HashMap<String, Integer> expensesList = new HashMap<>();
 
                      for (String word : Arrays.copyOfRange(lines,1,lines.length)) {
-                         // for (int i = 1; i < lines.length; i++)
+
                          String[] linesContent = word.split(",");
 
                          String itemName = linesContent[0];
                          Integer quantity = Integer.valueOf(linesContent[2]);
                          Integer unit_price = Integer.valueOf(linesContent[3]);
-                         //  itemSum = Integer.parseInt(String.valueOf(quantity))* Integer.parseInt(String.valueOf(unit_price));
+
                          int itemSum = quantity * unit_price;
-                         // itemSum = Integer.parseInt(linesContent[2]) * Integer.parseInt(linesContent[3]);
+
 
 
 
