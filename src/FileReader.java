@@ -77,7 +77,7 @@ public class FileReader {
                      MRis = true;
                      System.out.println("Обработано месячных отчетов: " + processedReports);
                  } else
-                     System.out.println(Main.wrongReport);
+                     System.out.println(Interface.wrongReport);
              }
          }
      }

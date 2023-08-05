@@ -2,8 +2,10 @@ import java.util.Scanner;
 
 
 public class Interface {
+    public static FileReader fileReader = new FileReader();
+    public static Debugger debugger = new  Debugger();
 
-    Interface()  {
+    public void printInterface()  {
         Scanner scanner = new Scanner(System.in);
         String command;
         do {
@@ -12,34 +14,35 @@ public class Interface {
 
             switch (command) {
                 case "1":
-                    Main.fileReader.MonthReading();
+                    Interface.fileReader.MonthReading();
                     break;
                 case "2":
-                    Main.fileReader.YearReading();
+                    Interface.fileReader.YearReading();
                     break;
                 case "3":
-                    Main.debugger.CheckList();
+                    Interface.debugger.CheckList();
                     break;
                 case "4":
-                    if (Main.fileReader.MRis) {
-                        ReportsDemo.MDemo(Main.fileReader.monthsList, Main.fileReader.monthlyReports);
+                    if (Interface.fileReader.MRis) {
+                        ReportsDemo.MDemo(Interface.fileReader.monthsList, Interface.fileReader.monthlyReports);
                     } else {
-                        System.out.println(Main.wrongReport);
+                        System.out.println(Interface.wrongReport);
                     }
                     break;
                 case "5":
-                    if (Main.fileReader.YRis) {
-                        ReportsDemo.YDemo(Main.fileReader.monthsList, Main.fileReader.yearlyReport.currentYear, Main.fileReader.yearlyReport.incomeList, Main.fileReader.yearlyReport.expensesList);
+                    if (Interface.fileReader.YRis) {
+                        ReportsDemo.YDemo(Interface.fileReader.monthsList, Interface.fileReader.yearlyReport.currentYear, Interface.fileReader.yearlyReport.incomeList, Interface.fileReader.yearlyReport.expensesList);
                     } else {
-                        System.out.println(Main.wrongReport);
+                        System.out.println(Interface.wrongReport);
                     }
                     break;
                 case "0":
-                    break;
+                    return;
                 default:
-                    System.out.println(Main.wrongCommand);
+                    System.out.println(Interface.wrongCommand);
             }
         } while (!command.isEmpty());
+
     }
 
     private static void printMenu() {
@@ -55,6 +58,8 @@ public class Interface {
         System.out.println("5 - Вывести информацию о годовом отчёте");
         System.out.println("0 - Выход!");
     }
+    public static String wrongCommand = "Ошибка ввода. Неверная команда!";
+    public static String wrongReport = "Ошибка ввода. Неполные данные по отчетам!";
 }
 
 
